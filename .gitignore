@@ -1,6 +1,9 @@
 *.pyc
 *.pyd
 
+*.log
+
+data/
 build/
 __pycache__/
 .ipynb_checkpoints/
