@@ -24,7 +24,7 @@ def hlmap(Cp, sqrtCinv):
     return scipy.linalg.logm(np.dot(sqrtCinv, np.dot(Cp, sqrtCinv)))
 
 
-def riemannian_kernel(X, xfit):
+def riemannian_kernel(X, Y):
     """ Riemannian-based kernel for symmetric and positive definite (SPD) matrices.
 
     Returns an array of shape (n_samples, n_samples) where element with
@@ -34,9 +34,10 @@ def riemannian_kernel(X, xfit):
     Args:
         X (np.ndarray):
             Sample matrix of shape (n_samples, n_features)
-        xfit (callable):
-            
+        Y (np.ndarray):
+            Sample matrix of shape (n_samples, n_features)
     """
+    print(X.shape, Y.shape)
     dtype = np.float16
     n_samples, n_features = X.shape
     n_original_variables = int(np.sqrt(n_features))
