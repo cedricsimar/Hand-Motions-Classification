@@ -7,7 +7,7 @@ SERIES_VALIDATION_INDICES = [2, 5]
 FEAT_EXTR_STRIDE = 12
 
 SAMPLE_LENGTH = 3584
-SAMPLING_FREQUENCY = 512
+SAMPLING_FREQUENCY = 500
 WELCH_OVERLAP = 0.25
 
 #                             delta   theta    alpha     beta    low-gamma     

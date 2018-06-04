@@ -42,8 +42,8 @@ def main():
     # DataAggregator().aggregate(Settings.TRAIN_DATA_CSV_PATH, Settings.TRAIN_AGG_DATA_PATH, purpose="train")
     
     # extract features from the raw aggregated data
-    # FeaturesExtractor(Settings.TRAIN_AGG_DATA_PATH + "sub1_aggregated_train.npy").extract()
-
+    FeaturesExtractor(Settings.TRAIN_AGG_DATA_PATH + "sub1_aggregated_train.npy").extract()
+    
     # load the preprocessed data
     training_set = np.load("../../../data/train/preprocessed/non_norm_psd_training_set.npy")
     validation_set = np.load("../../../data/train/preprocessed/non_norm_psd_validation_set.npy")
