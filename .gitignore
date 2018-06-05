@@ -1,8 +1,6 @@
 *.pyc
 *.pyd
 
-*.npy
-
 *.log
 
 build/
