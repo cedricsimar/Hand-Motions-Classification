@@ -1,0 +1,287 @@
+\documentclass[a4paper,11pt]{report}
+
+\usepackage{lscape}
+\usepackage{multirow,array}
+\usepackage{booktabs}
+\usepackage{newunicodechar}
+\usepackage{xspace}
+\usepackage[T1,OT1]{fontenc}
+\usepackage{newtxtext,newtxmath}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{blindtext}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{color}
+\usepackage[colorlinks=false,hidelinks]{hyperref}
+\usepackage{needspace}
+\usepackage{pdfpages}
+\usepackage{easy-todo}
+\usepackage{lipsum}
+\usepackage{natbib}
+\usepackage{tabularx}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{multicol}
+\usepackage{titlesec}
+\usepackage{etoolbox}
+
+%--- custom ---
+
+\newcommand{\lang}[1]{\emph{#1}}
+\newcommand{\er}{\textsuperscript{er} }
+\newcommand{\e}{\textsuperscript{e} }
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+
+\makeatletter
+\def\BState{\State\hskip-\ALG@thistlm}
+\makeatother
+
+\newcommand{\bin}{\in\{0,1\}}
+\newcommand{\real}{\in \mathbb{R}^+}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+\DeclareMathOperator{\xor}{XOR}
+
+% --- sectionning ---
+\makeatletter
+\renewcommand\@chapapp{Partie}
+
+\newcommand\chapterwithsubtitle[2]{
+  \chapter[#1: {\itshape#2}]{#1\\[2ex]\Large\itshape#2}
+}
+
+\def\@makechapterhead#1{%
+  \vspace*{30\p@}%
+  {\parindent \z@ \raggedright \normalfont
+    \ifnum \c@secnumdepth >\m@ne
+        \LARGE\bfseries\thechapter\quad
+        %\vskip 20\p@
+    \fi
+    \interlinepenalty\@M
+    \huge \bfseries #1
+    %\vskip 40\p@
+  }}
+\makeatother
+\setcounter{tocdepth}{2}
+
+\titleformat{\chapter}
+  {\normalfont\LARGE\bfseries}{\thechapter}{1em}{}
+\titlespacing*{\chapter}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
+\patchcmd{\chapter}{\if@openright\cleardoublepage\else\clearpage\fi}{}{}{}
+
+
+\renewcommand\bibname{Références}
+\renewcommand{\refname}{Références}
+\makeatletter
+\renewcommand\@biblabel[1]{#1.  }
+\makeatother
+
+% --- meta data ---
+\title{Projet INFO-F-524}
+\author{
+	Antoine Passemiers \\
+	Cédric Simar
+}
+
+% --- spec chars ---
+\newunicodechar{’}{'}
+
+
+\begin{document}
+
+\renewcommand\bibname{References}
+\renewcommand{\refname}{References}
+\makeatletter
+\renewcommand\@biblabel[1]{#1.  }
+\makeatother
+
+\begin{titlepage}
+	\centering
+	{\scshape\LARGE Université Libre de Bruxelles\par}
+	\vfill
+	{\LARGE\bfseries INFO-F-422 \\ Statistical foundations of Machine Learning \par
+		\vspace{3ex}}
+	{\itshape\Large Classifying Sample Covariance Matrices \\ by considering the geometry of Riemannian manifolds: \\ Application to Hand Motions Recognition \par}
+	\vfill
+	\makeatletter
+	{\large \@author\par}
+	\vfill
+	\@date\par
+	\makeatother
+\end{titlepage}
+
+\tableofcontents
+
+\setlength\parskip{0.5ex plus1ex minus.5ex}
+
+\newpage
+
+
+
+\chapter{Symmetric Definite Positive (SPD) matrices}
+
+\section{Sample Covariance Matrices (SCMs)}
+
+A necessary preliminary for understanding the mechanics of Riemannian geometry is to convince ourselves that
+SCMs are actually SPD matrices. Let $x_i = (x_{i1}, \ldots, x_{im})^T$ be a sequence of raw samples
+located in a fixed time window, where $i \in \{1, \ldots, n\}$ is a time step, $k$ is the number of electrodes,
+$m$ is the number of electrodes and $n$ is the number of samples.
+Let $\mu_x$ be the vector of empirical means of those samples:
+
+\begin{align}
+  \mu_x & = \frac{1}{n} \sum\limits_{i=1}^{n} x_i
+\end{align}
+
+\noindent where the size of $\mu_x$ is equal to $m$ and element
+$\mu_{x_i}$ is the empirical mean of samples from electrodes $i$.
+Then the corresponding SCM $\Sigma$ is found by applying this formula on the raw samples:
+
+\begin{align}
+  \Sigma & = \frac{1}{n} \sum\limits_{i=1}^{n} (x_i - \mu_x) \ (x_i - \mu_x)^T
+\end{align}
+
+\noindent More specifically, the covariance $\Sigma_{ij}$ between electrodes $i$ and $j$
+is given by $\frac{1}{n} \sum\limits_{k=1}^{n} (x_{ki} - \mu_{x_i}) \ (x_{kj} - \mu_{x_j})^T$.
+For $\Sigma$ to be positive definite, the scalar $z^T \ \Sigma \ z$ must be strictly positive
+for any non-zero vector $z \in \mathbb{R}^m$. Let's prove that this property holds:
+
+\begin{align}
+  z^T \Sigma z & = z^T \ \Big( \frac{1}{n} \sum\limits_{i=1}^{n} (x_i - \mu_x) \ (x_i - \mu_x)^T \Big) \ z \\
+  & = \frac{1}{n} \sum\limits_{i=1}^{n} z^T \ (x_i - \mu_x) \ (x_i - \mu_x)^T \ z \\
+  & = \frac{1}{n} \sum\limits_{i=1}^{n} \Big( (x_i - \mu_x)^T \ z \Big)^T \ \Big( (x_i - \mu_x)^T \ z \Big) \\
+  & = \frac{1}{n} \sum\limits_{i=1}^{n} \Big( (x_i - \mu_x)^T \ z \Big)^2 \ge 0
+\end{align}
+
+Matrix $\Sigma$ is thus semi-positive definite. Also, one can reasonably assume that in most cases,
+the SCM is such that all samples values are non-constant and that product $(x_i - \mu_x)^T \ z$
+is different from zero for at least one time step. This allows us to confirm that $\Sigma$ is definite
+positive. Also, it can be easily seen from the definition of $\Sigma$ that it is symmetric:
+
+\begin{align}
+  \Sigma^T & = \Big( \frac{1}{n} \sum\limits_{i=1}^{n} (x_i - \mu_x) \ (x_i - \mu_x)^T \Big)^T \\
+  & = \frac{1}{n} \sum\limits_{i=1}^{n} \Big( (x_i - \mu_x) \ (x_i - \mu_x)^T \Big)^T \\
+  & = \frac{1}{n} \sum\limits_{i=1}^{n} \Big( (x_i - \mu_x)^T \Big)^T \ \Big( (x_i - \mu_x) \Big)^T \\
+  & = \frac{1}{n} \sum\limits_{i=1}^{n} (x_i - \mu_x) \ (x_i - \mu_x)^T \\
+  & = \Sigma
+\end{align}
+
+\noindent SCMs are thus both symmetric and definite positive.
+
+
+\chapter{Riemannian manifolds}
+
+\section{Background}
+
+Let's make a necessarily short descrption of what Riemannian manifolds are. They have a quite heavy
+formalism, and rather simple ideas can become confusing if we stick to much to formulas. However, let's introduce them
+properly by defining what topological spaces, manifolds, differential manifolds and Riemannian manifolds are.
+
+\subsection{Topological spaces}
+
+TODO
+
+\subsection{Manifolds}
+
+TODO
+
+\subsection{Differentiable manifolds}
+
+TODO
+
+\subsection{Riemannian manifolds}
+
+TODO
+
+\section{Logarithmic and exponential maps}
+
+Riemannian manifolds are smooth manifolds (differentiable $C^k$-manifolds for which derivatives of all orders exist up to $k$)
+for which a scalar product is defined in the tangent space at any point on them. Given a manifold $\mathcal{M}$ and a point $p$,
+the tangent space is commonly denoted by $T_p \mathcal{M}$.
+A Riemannian metric is defined as an inner product of the form:
+
+\begin{equation}
+    g_p: T_p \mathcal{M} \times T_p \mathcal{M} \rightarrow \mathbb{R}, \ \ p \in \mathcal{M}
+\end{equation}
+
+and is a metric tensor capturing the lengths of two vectors as well as the angle between them. Note that the two
+points involved must be project to a tangent space at a same point $p$. Also, $g_p$ must be symmetric and positive definite.
+
+At each point of the manifold, there is an associated tangent space where a scalar product is defined.
+Plus, euclidean distance in a tangent space has revealed itself to be a good approximation of Riemannian distance
+on the manifold itself. Also, the scalar product in the tangent space at $C_{ref}$ is defined as \citep{BARACHANT2013172}:
+
+\begin{equation}
+    \langle S_1, S_2 \rangle_{C_{ref}} = tr \ (S_1 C_{ref}^{-1} S_2 C_{ref}^{-1})
+\end{equation}
+
+where $S_1$ and $S_2$ are two points / SPD matrices, and $tr(\cdot)$ is the trace operator.
+
+\begin{equation}
+    \phi(C) = Log_{C_{ref}} (C) = C_{ref}^{1/2} \ logm(C_{ref}^{-1/2} C_p C_{ref}^{-1/2}) \ C_{ref}^{1/2}
+\end{equation}
+
+The kernel function $k_R$ is a Riemannian metric that computes the scalar product of two points / SPD matrices projected
+on the tangent space. The kernel trick is useful here because this allows us to do 4 matrix multiplications less than
+what is required to explicitly map the SPD matrices to the tangent space.
+Let's denote $logm(C_{ref}^{-1/2} C_p C_{ref}^{-1/2})$ as a new function $logm_{C_{ref}} (C_p)$ for simplicity.
+
+\begin{align}
+    k_R(C_i, C_j; C_{ref}) & = \langle \phi(C_i), \phi(C_j) \rangle_{C_{ref}} \\
+    & = tr \ [\ Log_{C_{ref}} (C_i) \ C_{ref}^{-1} \ Log_{C_{ref}} (C_j) \ C_{ref}^{-1} \ ] \\
+    & = tr \ [\ logm(C_{ref}^{-1/2} C_i C_{ref}^{-1/2}) \ logm(C_{ref}^{-1/2} C_j C_{ref}^{-1/2}) \ ] \\
+    & = tr \ [\ logm_{C_{ref}} (C_i) \ logm_{C_{ref}} (C_j) \ ] 
+\end{align}
+
+It is noteworthy that operator $logm_{C_{ref}} (C)$ should return a matrix of the same shape as $C$.
+As a consequence, the memory requirements are linear to the training set size if the computations
+are cached for all SPD matrices.
+
+\section{Why should we care?}
+
+TODO: because it works
+
+TODO: show a concrete example with plots
+
+\chapter{Experimental results}
+
+TODO
+
+\section{Comparison with other models}
+
+TODO: AUC
+
+
+\newpage
+
+\bibliographystyle{apalike}
+\bibliography{report}
+
+
+\end{document}
