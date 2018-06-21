@@ -128,7 +128,7 @@
 	\vfill
 	{\LARGE\bfseries INFO-F-422 \\ Statistical foundations of Machine Learning \par
 		\vspace{3ex}}
-	{\itshape\Large Classifying Sample Covariance Matrices \\ by considering the geometry of Riemannian manifolds: \\ Application to Hand Motions Recognition \par}
+	{\itshape\Large Classifying Sample Covariance Matrices \\ using the geometry of Riemannian manifolds: \\ Application to Hand Motions Classification \par}
 	\vfill
 	\makeatletter
 	{\large \@author\par}
@@ -194,14 +194,19 @@ positive. Also, it can be easily seen from the definition of $\Sigma$ that it is
 
 \noindent SCMs are thus both symmetric and definite positive.
 
+\section{Relation to EEG signal classification}
+
+During a mental task, the EEG signal can be characterized by the covariant matrix estimated on a signal window of the length of the mental task. In this work, we hypothesize that the covariant matrix can be used reliably to describe the EEG signal associated with a specific mental task. Ultimately, the objective is to estimate a classification function $y_i = h(\Sigma_{i})$ that will map the covariant matrix $\Sigma_{i}$ to the associated hand movement class.
+
+
 
 \chapter{Riemannian manifolds}
 
 \section{Background}
 
-Let's make a necessarily short descrption of what Riemannian manifolds are. They have a quite heavy
+Let's make a necessarily short description of what Riemannian manifolds are. They have a quite heavy
 formalism, and rather simple ideas can become confusing if we stick to much to formulas. However, let's introduce them
-properly by defining what topological spaces, manifolds, differential manifolds and Riemannian manifolds are.
+properly by defining the notions of topological spaces, manifolds and Riemannian differential manifolds.
 
 \subsection{Topological spaces}
 
@@ -209,31 +214,25 @@ TODO
 
 \subsection{Manifolds}
 
-TODO
+A manifold is a topological space that can be approximated locally by an Euclidean space. For example, each kind of probability distributions can be seen as a manifold $\mathcal{M}$ where the probability distribution's parameters act as its coordinates in that topological space. 
 
-\subsection{Differentiable manifolds}
-
-TODO
-
-\subsection{Riemannian manifolds}
-
-TODO
-
-\section{Logarithmic and exponential maps}
+\subsection{Riemannian differential manifolds}
 
 Riemannian manifolds are smooth manifolds (differentiable $C^k$-manifolds for which derivatives of all orders exist up to $k$)
-for which a scalar product is defined in the tangent space at any point on them. Given a manifold $\mathcal{M}$ and a point $p$,
-the tangent space is commonly denoted by $T_p \mathcal{M}$.
+for which a scalar product is defined for any point in the tangent space. Given a manifold $\mathcal{M}$ and a point $\textbf{P}$,
+the tangent space is commonly denoted by $\mathcal{T}_P \mathcal{M}$ and can be seen as the set of tangent vectors at point $\textbf{P}$ in all directions.\\
 A Riemannian metric is defined as an inner product of the form:
 
 \begin{equation}
-    g_p: T_p \mathcal{M} \times T_p \mathcal{M} \rightarrow \mathbb{R}, \ \ p \in \mathcal{M}
+    g_p: T_p \mathcal{M} \times T_p \mathcal{M} \rightarrow \mathbb{R}, \ \ P \in \mathcal{M}
 \end{equation}
 
 and is a metric tensor capturing the lengths of two vectors as well as the angle between them. Note that the two
-points involved must be project to a tangent space at a same point $p$. Also, $g_p$ must be symmetric and positive definite.
+points involved must be project to a tangent space at a same point $P$. Also, $g_P$ must be symmetric and positive definite.
 
-At each point of the manifold, there is an associated tangent space where a scalar product is defined.
+\section{Projection to the tangent space, logarithmic and exponential maps}
+
+As note hereabove, at each point of the manifold, there is an associated tangent space where a scalar product is defined.
 Plus, euclidean distance in a tangent space has revealed itself to be a good approximation of Riemannian distance
 on the manifold itself. Also, the scalar product in the tangent space at $C_{ref}$ is defined as \citep{BARACHANT2013172}:
 
