@@ -128,7 +128,7 @@
 	\vfill
 	{\LARGE\bfseries INFO-F-422 \\ Statistical foundations of Machine Learning \par
 		\vspace{3ex}}
-	{\itshape\Large Classifying Sample Covariance Matrices \\ using the geometry of Riemannian manifolds: \\ Application to Hand Motions Classification \par}
+	{\itshape\Large Classifying Sample Covariance Matrices \\ using the geometry of Riemannian manifolds: \\\ \\ Application to Hand Motions Classification \par}
 	\vfill
 	\makeatletter
 	{\large \@author\par}
@@ -214,7 +214,7 @@ TODO
 
 \subsection{Manifolds}
 
-A manifold is a topological space that can be approximated locally by an Euclidean space. For example, each kind of probability distributions can be seen as a manifold $\mathcal{M}$ where the probability distribution's parameters act as its coordinates in that topological space. 
+A manifold is a topological space that can be approximated locally by an Euclidean space. For example, each kind of probability distributions $\mathcal{N}(\mu,\ \sigma^2)$ can be seen as a manifold $\mathcal{M}$ where the probability distribution's parameters $\mu$ and $\sigma^2$ act as coordinates in that topological space. 
 
 \subsection{Riemannian differential manifolds}
 
@@ -229,6 +229,20 @@ A Riemannian metric is defined as an inner product of the form:
 
 and is a metric tensor capturing the lengths of two vectors as well as the angle between them. Note that the two
 points involved must be project to a tangent space at a same point $P$. Also, $g_P$ must be symmetric and positive definite.
+
+\subsection{Riemannian distance}
+
+As stated hereabove, the covariant matrices are symmetric positive definite (SPD) and thus belongs to a particular Riemannian manifold. Usually we use Euclidean tools to compute approximated measures on covariant matrices. However, by taking into account the particular topology space of SPD matrices, we can use the corresponding Riemannian tools in order to compute more accurate measures, which leads to significant performance gains.\\
+\textbf{TOUTDOUX}\\
+| Geodesic = curve / line of minimal length between two points of the Manifold \\
+| Riemannian distance = length of the geodesic \\
+\\ \ \\
+| Metric of a RM is a function that assign each point P of the Manifold a scalar product in the tangent space. 
+We will use the Fisher information as a metric. Fisher information quantify the information of a parameter contained in a distribution. 
+Since the metric is a function that quantify the distance between two elements of the Manifold and that the Manifold has the distribution parameters as coordinates, Fisher information metric gives a distance that quantify the difference of information between distributions using different parameters.\\
+|\\
+\textbf{end of TOUTDOUX}\\
+
 
 \section{Projection to the tangent space, logarithmic and exponential maps}
 
