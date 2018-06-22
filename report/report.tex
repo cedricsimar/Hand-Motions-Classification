@@ -294,7 +294,7 @@ By arguing that the matrix logarithm of $A$ is the solution to the equation $exp
 \end{equation}
 \noindent where $I \in \mathbb{R}^{n \times n}$ is the identity matrix.
 
-As suggested by Barachant, the matrix logarithm and exponential of a SCM $C_i$ can be efficiently implemented by referring to the following formulas:
+As suggested by \citep{BARACHANT2013172}, the matrix logarithm and exponential of a SCM $C_i$ can be efficiently implemented by referring to the following formulas:
 \begin{align}
   logm(\mathbf{C}) & = \mathbf{V} \log{(\mathbf{\Lambda})} \mathbf{V}^T \\
   expm(\mathbf{C}) & = \mathbf{V} \exp{(\mathbf{\Lambda})} \mathbf{V}^T
@@ -348,7 +348,22 @@ is to consider the arithmetic mean of all SCMs from the training set. Indeed, th
 SPD. However, Euclidean averaging is often subject to a \textit{swelling effect}~\citep{doi:10.1137/050637996}: 
 the determinant of the averaged matrice is larger than the determinant of any matrix from the manifold.
 
-TODO Cedric: ce que tu étais en train d'écrire
+\subsection{Riemannian mean}
+A proper way to compute the mean of SPD matrices is to define, by analogy to the Euclidean mean, the Riemannian mean (also named geometric mean or Frechet barycentre) of $I \geq 1$ SPD matrices as follows:
+$$\mathcal{G}\left(\Sigma_1, ..., \Sigma_I \right) = \mathop{\mathrm{argmin}}\limits_{\Sigma \in P(n)} \sum_{i=1}^I \delta_R^2 \left( \Sigma,\ \Sigma_i \right) $$
+There exists no explicit formulation to compute the best reference matrix that minimizes the sum of the Riemannian distances to all training points on the manifold and the sum of euclidean distances on the tangent space.\\
+Thus, we have to use the following iterative optimization procedure consisting in projecting all training SCMs onto the tangent plane based on the current reference matrix, computing their arithmetic mean, and finally replacing the current reference matrix by a new one by projecting the arithmetic mean back to the manifold.\\
+The iterative procedure described hereabove can be formalized as follows:
+\begin{itemize}
+\item $t \leftarrow 0$
+\item Initialize $\mathcal{R}^{(1)} = \frac{1}{P} \sum\limits_{p=1}^{P} C_p$
+\item While $||\bar{S}||_F \ge \epsilon$
+\item $\bar{S} = \frac{1}{P} \sum\limits_{p=1}^{P} Log_{\mathcal{R}^{(t)}} (C_p)$
+\item $\mathcal{R}^{(t+1)} = Exp_{\mathcal{B}^{(t)}} (\bar{S})$
+\item $t \leftarrow t + 1$
+\end{itemize}\ \\
+Where $||S||_F$ is the Frobenius norm of $S$, and $Log_{\mathcal{B}^{(t)}}$ and $Exp_{\mathcal{B}^{(t)}}$
+are the logarithmic and exponential maps at iteration $t$, respectively.
 
 \chapter{Experimental results}
 
@@ -357,6 +372,23 @@ motions, even when a small number of training points is provided.
 Also, we observe that Riemannian-based kernel performs significantly better than linear kernel.
 These two facts highlight both the generalization abilities of support vector machines as well as the linear separability
 of the projected SCMs from the manifold to a local euclidean space.
+
+\section{Graphical representation}
+
+\begin{figure}[!h]
+\begin{center}
+  \includegraphics[width=.8\textwidth]{imgs/sep2.eps}
+  \caption{\citep{BARACHANT2013172} Separation of covariance matrices of two classes. The x axis represents the Riemannian distance of each covariance matrix $\Sigma_i$ of class (1) to the mean covariance matrix $\Sigma^{(1)}$ of class 1. The y axis represents the Riemannian distance of each covariance matrix $\Sigma_i$ of class (2) to the mean covariance matrix $\Sigma^{(2)}$ of class 2.}
+  \end{center}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+  \includegraphics[width=.8\textwidth]{imgs/ts.eps}
+  \caption{\citep{BARACHANT2013172} Example of a projection from the SPD matrices space to the corresponding tangent space}
+  \end{center}
+\end{figure}
+
 
 \section{Comparison with other models}
 
