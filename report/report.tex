@@ -147,7 +147,7 @@
 
 \chapter{Symmetric Definite Positive (SPD) matrices}
 
-\section{Sample Covariance Matrices (SCMs)}
+\section{Sample Covariance Matrices (SCMs) are Symmetric (Semi-)Definite Positive matrices}
 
 A necessary preliminary for understanding the mechanics of Riemannian geometry is to convince ourselves that
 SCMs are actually SPD matrices. Let $x_i = (x_{i1}, \ldots, x_{im})^T$ be a sequence of raw samples
@@ -194,10 +194,21 @@ positive. Also, it can be easily seen from the definition of $\Sigma$ that it is
 
 \noindent SCMs are thus both symmetric and definite positive.
 
+\section{SPD matrices lie on a convex cone}
+
+Let $\mathcal{M}(n)$ be the set of $n \times n$ real matrices.
+Also, let $\mathcal{P}(n)$ be the space of $n \times n$ symmetric positive-definite matrices defined as:
+\begin{equation}
+    \mathcal{P}(n) = \{ A \in \mathcal{M}(n), \ A^T = A, x^T A x > 0, x \in \mathbb{N} \backslash \{0\}
+\end{equation}
+$\mathcal{P}(n)$ is an open convex cone if, for all $P$ and $Q$ in $\mathcal{P}(n)$,
+$P + tQ$ is in $\mathcal{P}(n) \ \forall t > 0$~\citep{doi:10.1137/S0895479803436937}.
+It is indeed easy to see that, if $P$ and $Q$ are symmetric positive-definite, 
+$P + tQ$ is also symmetric positive-definite \ $\forall t > 0$.
+
 \section{Relation to EEG signal classification}
 
 During a mental task, the EEG signal can be characterized by the covariant matrix estimated on a signal window of the length of the mental task. In this work, we hypothesize that the covariant matrix can be used reliably to describe the EEG signal associated with a specific mental task. Ultimately, the objective is to estimate a classification function $y_i = h(\Sigma_{i})$ that will map the covariant matrix $\Sigma_{i}$ to the associated hand movement class.
-
 
 
 \chapter{Riemannian manifolds}
@@ -210,11 +221,25 @@ properly by defining the notions of topological spaces, manifolds and Riemannian
 
 \subsection{Topological spaces}
 
-TODO
+Let's use the axiomatized definition of topological spaces from Hausdorff.
+Let $X$ be a set and $N(x)$ a function that maps a point $x \in X$ to a set of neighbourhoods of $x$.
+Then $X$ is a so-called topological space if the following axioms are satisfied:
+\begin{itemize}
+  \item The intersection of two neighbourhoods of $x$ belongs to $N(x)$.
+  \item For any set in $N(x)$, $x$ belongs to it ($x$ is located in its own neighbourhoods).
+  \item Any subset of $X$ that contains a neighbourhood of $x$, is itself a neighbourhood of $x$.
+  \item For any neighbourhood $N_1 \in N(x)$, there exists another neighbourhood $N_2 \in N(x)$
+  such that $N_1$ is the neighbourhood of every point in $N_2$.
+\end{itemize}
 
 \subsection{Manifolds}
 
-A manifold is a topological space that can be approximated locally by an Euclidean space. For example, each kind of probability distributions $\mathcal{N}(\mu,\ \sigma^2)$ can be seen as a manifold $\mathcal{M}$ where the probability distribution's parameters $\mu$ and $\sigma^2$ act as coordinates in that topological space. 
+A Hausdorff space is a topological space where two distinct points have disjoint neighbourhoods.
+A manifold is a Hausdorff space that can be approximated locally by an Euclidean space. For example, each kind of probability distributions $\mathcal{N}(\mu,\ \sigma^2)$ can be seen as a manifold $\mathcal{M}$ where the probability distribution's parameters $\mu$ and $\sigma^2$ act as coordinates in that topological space.
+
+It is important to note that manifolds are not embedded in Hilbert spaces by definition, which does not allow to perform scalar product on the manifold.
+This implies that the notion of angles and distances do not exist when analyzing manifolds. A famous consequence of this is that a sphere is identical
+to a cube, from a topological point of view. However, there two manifolds are no longer identical when introducing a Riemannian metric.
 
 \subsection{Riemannian differential manifolds}
 
@@ -232,7 +257,7 @@ points involved must be project to a tangent space at a same point $P$. Also, $g
 
 \subsection{Riemannian distance}
 
-As stated hereabove, the covariant matrices are symmetric positive definite (SPD) and thus belongs to a particular Riemannian manifold. Usually we use Euclidean tools to compute approximated measures on covariant matrices. However, by taking into account the particular topology space of SPD matrices, we can use the corresponding Riemannian tools in order to compute more accurate measures, which leads to significant performance gains.\\
+As stated hereabove, the covariance matrices are symmetric positive definite (SPD) and thus belongs to a particular Riemannian manifold. Usually we use Euclidean tools to compute approximated measures on covariance matrices. However, by taking into account the particular topology space of SPD matrices, we can use the corresponding Riemannian tools in order to compute more accurate measures, which leads to significant performance gains.\\
 
 Let $\alpha$ be a curve on the manifold with parameter $t \in [0, 1]$ and $\dot{\alpha}(t)$ be the tangent vector $\alpha (t)$ of norm $||\dot{\alpha}(t)||_{\alpha (t)}$. The length of the curve from $\alpha (0)$ to $\alpha (1)$ is defined as:
 $$L(\alpha) = \int_{0}^{1} ||\dot{\alpha}(t)||_{\alpha (t)} dt$$
@@ -241,24 +266,52 @@ Let $P_1$ and $P_2$ be two points on the manifold, $\Gamma$ the geodesic with pa
 $$\delta_R (P_1,\ P_2) = L(\Gamma) = \int_{0}^{1} ||\dot{\Gamma}(t)||_{\alpha (t)} dt$$
 
 \subsection{Metric of the Riemannian manifold}
-A metric of a Riemannian manifold is a function that assign a scalar product to each point $P$ of the Manifold in the tangent space. 
-The Fisher information quantifies the information of a parameter contained in a distribution. Since we have seen that the distribution parameters are used as coordinates in the manifold, using Fisher information as metric gives us a convenient way to represent the distance between two points on the manifold, quantified by the difference of information between the two distributions using different parameters.
+A metric of a Riemannian manifold is a function that assign a scalar product to each point $P$ of the manifold in the tangent space. 
+The Fisher information quantifies the amount of information contained in data points that is useful to determine the parameters of 
+the distribution that models them.
+Since we have seen that the distribution parameters are used as coordinates in the manifold, using Fisher information as metric gives us a convenient way to represent the distance between two points on the manifold, quantified by the difference of information between the two distributions using different parameters.
+
+\section{Matrix operations}
+
+The exponential of a matrix $A \in \mathbb{R}^{n \times n}$ is expressed as the convergent series~\citep{doi:10.1137/S0895479803436937}:
+\begin{equation}
+  expm(A) = \sum\limits_{k=0}^{\infty} \frac{1}{k!} A^k
+\end{equation}
+By arguing that the matrix logarithm of $A$ is the solution to the equation $expm(X) = A$, one can easily find a series that converges to this solution:
+\begin{equation}
+  logm(A) = - \sum\limits_{k=1}^{\infty} \frac{1}{k} (I - A)^k
+\end{equation}
+\noindent where $I \in \mathbb{R}^{n \times n}$ is the identity matrix.
+
+As suggested by Barachant, the matrix logarithm and exponential of a SCM $C_i$ can be efficiently implemented by referring to the following formulas:
+\begin{align}
+  logm(\mathbf{C}) & = \mathbf{V} \log{(\mathbf{\Lambda})} \mathbf{V}^T \\
+  expm(\mathbf{C}) & = \mathbf{V} \exp{(\mathbf{\Lambda})} \mathbf{V}^T
+\end{align}
+\noindent where $\mathbf{\Lambda}$ is the diagonal matrix of eigenvalues
+and $\mathbf{V}$ is the matrix containing the eigenvectors of $\mathbf{C_i}$.
 
 \section{Projection to the tangent space, logarithmic and exponential maps}
 
-As note hereabove, at each point of the manifold, there is an associated tangent space where a scalar product is defined.
-Plus, euclidean distance in a tangent space has revealed itself to be a good approximation of Riemannian distance
+As noted hereabove, at each point of the manifold, there is an associated tangent space where a scalar product is defined.
+Plus, euclidean distance in the tangent space has revealed itself to be a good approximation of Riemannian distance
 on the manifold itself. Also, the scalar product in the tangent space at $C_{ref}$ is defined as \citep{BARACHANT2013172}:
 
 \begin{equation}
     \langle S_1, S_2 \rangle_{C_{ref}} = tr \ (S_1 C_{ref}^{-1} S_2 C_{ref}^{-1})
 \end{equation}
 
-where $S_1$ and $S_2$ are two points / SPD matrices, and $tr(\cdot)$ is the trace operator.
+\noindent where $S_1$ and $S_2$ are two points / SPD matrices, and $tr(\cdot)$ is the trace operator.
+The explicit projection operators are given by:
 
 \begin{equation}
     \phi(C) = Log_{C_{ref}} (C) = C_{ref}^{1/2} \ logm(C_{ref}^{-1/2} C_p C_{ref}^{-1/2}) \ C_{ref}^{1/2}
 \end{equation}
+\begin{equation}
+    \phi^{-1}(C) = Exp_{C_{ref}} (C) = C_{ref}^{-1/2} \ expm(C_{ref}^{1/2} C_p C_{ref}^{1/2}) \ C_{ref}^{-1/2}
+\end{equation}
+
+\noindent where $logm$ and $expm$ denote the matrix logarithm and matrix exponential, respectively.
 
 The kernel function $k_R$ is a Riemannian metric that computes the scalar product of two points / SPD matrices projected
 on the tangent space. The kernel trick is useful here because this allows us to do 4 matrix multiplications less than
@@ -276,20 +329,39 @@ It is noteworthy that operator $logm_{C_{ref}} (C)$ should return a matrix of th
 As a consequence, the memory requirements are linear to the training set size if the computations
 are cached for all SPD matrices.
 
-\section{Why should we care?}
+\section{Finding the best tangent plane}
 
-TODO: because it works
+One naive and straightforward approach for determining which of the training SCM point will be the reference point
+(intersection between the manifold and the hypothetically best tangent plane)
+is to consider the arithmetic mean of all SCMs from the training set. Indeed, the mean of SPD matrices is itself
+SPD. However, Euclidean averaging is often subject to a \textit{swelling effect}~\citep{doi:10.1137/050637996}: 
+the determinant of the averaged matrice is larger than the determinant of any matrix from the manifold.
 
-TODO: show a concrete example with plots
+TODO Cedric: ce que tu étais en train d'écrire
 
 \chapter{Experimental results}
 
-TODO
+It is noteworthy that Riemannian-based kernel performs really well on the task of classifying hand
+motions, even when a small number of training points is provided. 
+Also, we observe that Riemannian-based kernel performs significantly better than linear kernel.
+These two facts highlight both the generalization abilities of support vector machines as well as the linear separability
+of the projected SCMs from the manifold to a local euclidean space.
 
 \section{Comparison with other models}
 
-TODO: AUC
+Here is a summary of the four different models and approaches we considered:
+\begin{itemize}
+  \item A Support Vector Machine with Riemannian-based kernel taking the curvature of the manifold into account
+  \item A naive approach based on low frequencies with a Random Forest
+  \item A Logistic Regression learning from Power Spectral Densities
+  \item A raw signal classification with a Convolutional Neural Network
+\end{itemize}
+For more details, please refer to our notebook:
+\textit{Hand motions classification using non-invasive EEG recordings}.
 
+\begin{center}
+  \includegraphics[scale=0.9]{imgs/auc.png}
+\end{center}
 
 \newpage
 
