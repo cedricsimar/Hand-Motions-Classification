@@ -263,13 +263,24 @@ Let $\alpha$ be a curve on the manifold with parameter $t \in [0, 1]$ and $\dot{
 $$L(\alpha) = \int_{0}^{1} ||\dot{\alpha}(t)||_{\alpha (t)} dt$$
 Let the geodesic be the curve of minimum length $\Gamma = \mathop{\mathrm{argmin}}\limits_{\alpha}\ L(\alpha)$ that represents the distance between two points on the manifold.
 Let $P_1$ and $P_2$ be two points on the manifold, $\Gamma$ the geodesic with parameter $t$ from $\Gamma(0) = P_1$ to $\Gamma(1) = P_2$ and let $\Gamma(t)$ a point on the geodesic, the Riemannian distance $\delta_R$ is defined as:
-$$\delta_R (P_1,\ P_2) = L(\Gamma) = \int_{0}^{1} ||\dot{\Gamma}(t)||_{\alpha (t)} dt$$
+$$\delta_R (P_1,\ P_2) = L(\Gamma) = \int_{0}^{1} ||\dot{\Gamma}(t)||_{\Gamma (t)} dt$$
 
 \subsection{Metric of the Riemannian manifold}
 A metric of a Riemannian manifold is a function that assign a scalar product to each point $P$ of the manifold in the tangent space. 
 The Fisher information quantifies the amount of information contained in data points that is useful to determine the parameters of 
 the distribution that models them.
-Since we have seen that the distribution parameters are used as coordinates in the manifold, using Fisher information as metric gives us a convenient way to represent the distance between two points on the manifold, quantified by the difference of information between the two distributions using different parameters.
+Since we have seen that the distribution parameters are used as coordinates in the manifold, using Fisher information as metric gives us a convenient way to represent the distance between two points on the manifold, quantified by the difference of information between the two distributions using different parameters.\\\ \\
+In the case of multivariate normal distributions of the form $\mathcal{N}(\mu, \Sigma)$, the corresponding Riemannian manifold is of dimension $m = \frac{n(n+1)}{2}$ because it is only parameterized by the SPD covariance matrix $\Sigma \in \mathbb{R}^{n \times n}$ (the means vector $\mu = 0$). In this case, the elements of the Fisher matrix are:
+$$G_{i,j} = \frac{1}{2}\ Tr\ \left(\Sigma^{-1} \frac{\partial \Sigma}{\partial \theta_i}\Sigma^{-1} \frac{\partial \Sigma}{\partial \theta_j}\right)$$
+Where $\theta = \left[ \theta_1, ..., \theta_i, ... \theta_j, ... \theta_m \right]$ is the vector of $m$ parameters of the probability distribution.\\\ \\
+Let $S_1,\ S_2$ be two SPD matrices of size $n \times n$ the scalar product in the tangent space is defined as:
+$$<S_1, S_2>_\Sigma \ =\ Tr\ \left(S_1 \Sigma^{-1} S_2 \Sigma^{-1}\right)$$
+Let $P(n)$ be the SPD manifold, $\Gamma(t) :\ [0,1] \rightarrow P(n)$ be the geodesic from $\Gamma(0) = \Sigma_1$ to $\Gamma(1) = \Sigma_2$, the length of the geodesic $\Gamma(t)$ is:
+$$L(\Gamma) = \int_{0}^{1} ||\dot{\Gamma}(t)||_{\Gamma (t)} dt = \int_{0}^{1} \sqrt{Tr\ \left(\dot{\Gamma}(t)\Gamma^{-1}(t)\dot{\Gamma}(t)\Gamma^{-1}(t)\right)}\ dt$$
+\citep{BARACHANT2013172} showed that the geodesic formulation with respect to the metric is $\Gamma(t) = \Sigma_1^{\frac{1}{2}} \left(\Sigma_1^{-\frac{1}{2}} \Sigma_2 \Sigma_1^{-\frac{1}{2}} \right)^t \Sigma_1^{\frac{1}{2}}$\\
+We then combine this geodesic formulation with the formula of the length of the geodesic in order to find the formulation of the Riemannian distance $\delta_R$ between $\Sigma_1$ and $\Sigma_2$ as follows:
+$$\delta_R \left(\Sigma_1,\ \Sigma_2 \right) = ||\log\left(\Sigma_1^{-1} \Sigma_2\right)||_F = \left[\sum_{i=1}^n \log^2 \lambda_i \right]^{\frac{1}{2}}$$
+Where $||A||_F$ is the Frobenius norm of matrix A and $\lambda_i$ with $i \in \{1, ..., n\}$ the eigenvalues of $\Sigma_1^{-1} \Sigma_2$.
 
 \section{Matrix operations}
 
@@ -359,9 +370,13 @@ Here is a summary of the four different models and approaches we considered:
 For more details, please refer to our notebook:
 \textit{Hand motions classification using non-invasive EEG recordings}.
 
+
+\begin{figure}[!h]
 \begin{center}
-  \includegraphics[scale=0.9]{imgs/auc.png}
-\end{center}
+  \includegraphics[width=.7\textwidth]{imgs/auc.eps}
+  \end{center}
+\end{figure}
+
 
 \newpage
 
