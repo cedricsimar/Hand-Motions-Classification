@@ -232,6 +232,7 @@ Then $X$ is a so-called topological space if the following axioms are satisfied:
   such that $N_1$ is the neighbourhood of every point in $N_2$.
 \end{itemize}
 
+
 \subsection{Manifolds}
 
 A Hausdorff space is a topological space where two distinct points have disjoint neighbourhoods.
@@ -246,7 +247,7 @@ to a cube, from a topological point of view. However, there two manifolds are no
 Riemannian manifolds are smooth manifolds (differentiable $C^k$-manifolds for which derivatives of all orders exist up to $k$)
 for which a scalar product is defined for any point in the tangent space. Given a manifold $\mathcal{M}$ and a point $\textbf{P}$,
 the tangent space is commonly denoted by $\mathcal{T}_P \mathcal{M}$ and can be seen as the set of tangent vectors at point $\textbf{P}$ in all directions.\\
-A Riemannian metric is defined as an inner product of the form:
+A Riemannian metric is defined as an inner product of the form~\citep{barac2012, barachant:tel-01196752}:
 
 \begin{equation}
     g_p: T_p \mathcal{M} \times T_p \mathcal{M} \rightarrow \mathbb{R}, \ \ P \in \mathcal{M}
@@ -358,9 +359,9 @@ The iterative procedure described hereabove can be formalized as follows:
 \item $t \leftarrow 0$
 \item Initialize $\mathcal{R}^{(1)} = \frac{1}{P} \sum\limits_{p=1}^{P} C_p$
 \item While $||\bar{S}||_F \ge \epsilon$
-\item $\bar{S} = \frac{1}{P} \sum\limits_{p=1}^{P} Log_{\mathcal{R}^{(t)}} (C_p)$
-\item $\mathcal{R}^{(t+1)} = Exp_{\mathcal{B}^{(t)}} (\bar{S})$
-\item $t \leftarrow t + 1$
+\item \ \ \ \ \ \ \ \ $\bar{S} = \frac{1}{P} \sum\limits_{p=1}^{P} Log_{\mathcal{R}^{(t)}} (C_p)$
+\item \ \ \ \ \ \ \ \ $\mathcal{R}^{(t+1)} = Exp_{\mathcal{B}^{(t)}} (\bar{S})$
+\item \ \ \ \ \ \ \ \ $t \leftarrow t + 1$
 \end{itemize}\ \\
 Where $||S||_F$ is the Frobenius norm of $S$, and $Log_{\mathcal{B}^{(t)}}$ and $Exp_{\mathcal{B}^{(t)}}$
 are the logarithmic and exponential maps at iteration $t$, respectively.
